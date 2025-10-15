@@ -1,0 +1,96 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 30px auto;
+  padding: 0 20px;
+  color: #fff;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.dashboard-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.dashboard-buttons button {
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-user-btn {
+  background: rgba(59,130,246,0.7);
+}
+
+.manage-users-btn {
+  background: rgba(16,185,129,0.7);
+}
+
+.logout-btn {
+  background: rgba(239,68,68,0.7);
+}
+
+.dashboard-buttons button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Glassmorphism DataTable */
+.user-table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+}
+
+.user-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+  color: #fff;
+}
+
+.user-table-container th,
+.user-table-container td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.user-table-container th {
+  background: rgba(255,255,255,0.2);
+}
+
+.user-table-container tbody tr:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.user-table-container tbody button.edit-btn {
+  background: rgba(59,130,246,0.7);
+}
+
+.user-table-container tbody button.delete-btn {
+  background: rgba(239,68,68,0.7);
+}
+
+.user-table-container button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+@media(max-width:768px){
+  .dashboard-buttons {
+    flex-direction: column;
+  }
+  .dashboard-buttons button {
+    width: 100%;
+  }
+}
