@@ -6,6 +6,8 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [contactNo, setContactNo] = useState("");
+  const [address, setAddress] = useState("");
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const navigate = useNavigate();
@@ -22,6 +24,7 @@ export default function Register() {
     if (!name) tempErrors.name = "Name is required";
     if (!email) tempErrors.email = "Email is required";
     if (!password) tempErrors.password = "Password is required";
+    if (!contactNo) tempErrors.contactNo = "Contact Number is required";
     if (password && password.length > 8) tempErrors.password = "Password max 8 characters";
 
     if (Object.keys(tempErrors).length > 0) {
@@ -33,7 +36,7 @@ export default function Register() {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password,  contactNo, address }),
       });
       const data = await res.json();
 
@@ -61,44 +64,37 @@ export default function Register() {
         <h2>Register</h2>
         <form onSubmit={handleSubmit} className="form-animate">
           
-          <div className="input-group">
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                setErrors({ ...errors, name: "" });
-              }}
-            />
-            {errors.name && <p className="error-text">{errors.name}</p>}
-          </div>
+            <div className="input-group">
+                <input type="text" placeholder="Full Name" value={name}
+                onChange={(e) => { setName(e.target.value); setErrors({ ...errors, name: "" });}}
+                />
+                {errors.name && <p className="error-text">{errors.name}</p>}
+            </div>
 
-          <div className="input-group">
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setErrors({ ...errors, email: "" });
-              }}
-            />
-            {errors.email && <p className="error-text">{errors.email}</p>}
-          </div>
+            <div className="input-group">
+                <input type="email" placeholder="Email" value={email}
+                onChange={(e) => { setEmail(e.target.value); setErrors({ ...errors, email: "" });}}
+                />
+                {errors.email && <p className="error-text">{errors.email}</p>}
+            </div>
 
-          <div className="input-group">
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setErrors({ ...errors, password: "" });
-              }}
-            />
-            {errors.password && <p className="error-text">{errors.password}</p>}
-          </div>
+            <div className="input-group">
+                <input type="password" placeholder="Password" value={password}
+                onChange={(e) => { setPassword(e.target.value);setErrors({ ...errors, password: "" });}}
+                />
+                {errors.password && <p className="error-text">{errors.password}</p>}
+            </div>
+
+            <div className="input-group">
+                <input type="text" placeholder="Contact Number" value={contactNo}
+                    onChange={(e) => { setContactNo(e.target.value);setErrors({ ...errors, contactNo: "" });}}
+                />
+                {errors.contactNo && <p className="error-text">{errors.contactNo}</p>}
+            </div>
+
+            <div className="input-group">
+                <input type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)}/>
+            </div>
 
           {serverError && <p className="error-text">{serverError}</p>}
 

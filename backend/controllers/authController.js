@@ -6,12 +6,13 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, contactNo, address } = req.body;
 
     const missingFields = [];
     if (!name) missingFields.push("Name");
     if (!email) missingFields.push("Email");
     if (!password) missingFields.push("Password");
+    if (!contactNo) missingFields.push("Contact Number"); 
 
     if (missingFields.length > 0) {
       return res.status(400).json({ message: `Missing field(s): ${missingFields.join(", ")}` });
@@ -43,7 +44,7 @@ export const register = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser = await User.create({ name, email, password });
+    const newUser = await User.create({ name, email, password: hashedPassword, contactNo, address });
 
     res.status(201).json({ message: "User registered successfully." });
 

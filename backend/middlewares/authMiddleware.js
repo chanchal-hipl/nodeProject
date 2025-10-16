@@ -3,8 +3,10 @@ import User from "../models/User.js";
 
 export const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer "))
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "Unauthorized" });
+  }
 
   const token = authHeader.split(" ")[1];
 
@@ -13,6 +15,7 @@ export const authMiddleware = async (req, res, next) => {
     req.user = await User.findById(decoded.id).select("-password");
     next();
   } catch (err) {
-    return res.status(401).json({ message: "Token invalid or expired" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 };
+

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 export default function UserList() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUsers();
@@ -13,17 +15,30 @@ export default function UserList() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const data = await res.json();
-      if (res.ok) setUsers(data.users);
-      else alert(data.message);
+
+      if (res.ok) {
+        if (Array.isArray(data)) {
+          setUsers(data);
+        } else if (Array.isArray(data.users)) {
+          setUsers(data.users);
+        } else {
+          setUsers([]);
+        }
+      } else {
+        alert(data.message || "Failed to fetch users");
+      }
     } catch (err) {
       alert("Error fetching users");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleEdit = (id) => {
-    // navigate to edit page or show modal
-    alert("Edit user " + id);
-  };
+
+    const handleEdit = (id) => {
+    navigate(`/edit-user/${id}`);
+    };
+
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
@@ -33,12 +48,16 @@ export default function UserList() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const data = await res.json();
-      if (res.ok) fetchUsers(); // refresh table
+       if (res.ok) fetchUsers();
       else alert(data.message);
     } catch (err) {
       alert("Error deleting user");
     }
   };
+
+  if (loading) {
+    return <p style={{ textAlign: "center" }}>Loading users...</p>;
+  }
 
   return (
     <div className="user-table-container">
@@ -53,7 +72,7 @@ export default function UserList() {
           </tr>
         </thead>
         <tbody>
-          {users.length === 0 ? (
+          {!users || users.length === 0 ? (
             <tr>
               <td colSpan={5} style={{ textAlign: "center", padding: "20px" }}>
                 No users found
@@ -67,9 +86,12 @@ export default function UserList() {
                 <td>{user.email}</td>
                 <td>{user.address || "-"}</td>
                 <td>
-                  <button onClick={() => handleEdit(user._id)}>Edit</button>
-                  <button onClick={() => handleDelete(user._id)}>Delete</button>
+                    <div className="action-buttons">
+                        <button onClick={() => handleEdit(user._id)}>Edit</button>
+                        <button onClick={() => handleDelete(user._id)}>Delete</button>
+                    </div>
                 </td>
+
               </tr>
             ))
           )}
